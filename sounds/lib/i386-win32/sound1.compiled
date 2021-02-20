@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\FPC\3.0.4\bin\i386-Win32\fpc.exe" Date="1262918680"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FiC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\sounds\lib\i386-win32 -FuC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\sounds\ -FUC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\sounds\lib\i386-win32\ -FEC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\sounds\ -oC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\sounds\sound1.exe sound1.lpr"/>
+</CONFIG>
