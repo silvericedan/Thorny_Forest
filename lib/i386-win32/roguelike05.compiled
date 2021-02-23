@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\FPC\3.0.4\bin\i386-Win32\fpc.exe" Date="1262918680"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FuC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\ -FUC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\lib\i386-win32\ -FEC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\ -oC:\FPC\3.0.4\bin\i386-win32\PRACTICAS\roguelike05\roguelike05.exe roguelike05.pas"/>
-</CONFIG>

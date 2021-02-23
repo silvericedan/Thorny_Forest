@@ -8,10 +8,11 @@
         <MainUnitHasCreateFormStatements Value="False"/>
         <MainUnitHasTitleStatement Value="False"/>
         <MainUnitHasScaledStatement Value="False"/>
+        <UseDefaultCompilerOptions Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
-      <Title Value="sound1"/>
+      <Title Value="ThornyForest"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
@@ -28,7 +29,7 @@
     </RunParams>
     <Units Count="1">
       <Unit0>
-        <Filename Value="sound1.lpr"/>
+        <Filename Value="ThornyForest.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
     </Units>
@@ -37,10 +38,9 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="sound1"/>
+      <Filename Value="ThornyForest"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir)"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>

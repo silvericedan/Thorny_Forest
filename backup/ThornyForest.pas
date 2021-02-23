@@ -1,4 +1,4 @@
-program roguelike05;
+program ThornyForest;
 
 uses crt, actors,gameinterface;
 
@@ -94,6 +94,7 @@ BEGIN
         writeln;
         writeln('                                  ENDING THE GAME...');
         writeln('                               PRESS ANY KEY TO EXIT');
+        cursoron;
         readkey;
 END.
 
