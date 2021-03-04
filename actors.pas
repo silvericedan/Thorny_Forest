@@ -99,7 +99,7 @@ end;
 
           made_attack, pick_up_item, drop_items : boolean;
 
-          ch:char;
+          ch, move : char;
 
 
 implementation
@@ -231,14 +231,23 @@ procedure Personaje.respawn();
 procedure Personaje.Detect_Keyboard();
         BegiN
                 ch:=Readkey;
-                ch:=lowercase(ch);
-
-                case (ch) of
+                move:=lowercase(ch);
+                case (move) of
+                'k' :   begin         {k es left arrow}
+                        yb:=y;
+                        xb:=x - 1;
+                        dire:='East';
+                        end;
 
                 'a' :   begin
                         yb:=y;
                         xb:=x - 1;
                         dire:='East';
+                        end;
+                'm' :   begin         {m es right arrow}
+                        yb:=y;
+                        xb:=x+1;
+                        dire:='West';
                         end;
 
                 'd' :   begin
@@ -247,16 +256,33 @@ procedure Personaje.Detect_Keyboard();
                         dire:='West';
                         end;
 
+                'h' :   begin         {h es up arrow}
+                        yb:=y - 1;
+                        xb:=x;
+                        dire:='North';
+                        end;
+
                 'w' :   begin
                         yb:=y - 1;
                         xb:=x;
                         dire:='North';
                         end;
 
+                'p' :   begin         {p es up arrow}
+                        yb:=y + 1;
+                        xb:=x;
+                        dire:='South';
+                        end;
+
                 's' :   begin
                         yb:=y + 1;
                         xb:=x;
                         dire:='South';
+                        end;
+                else    begin
+                        yb:= y;
+                        xb:= x;
+                        dire:='No move';
                         end;
 
                 end;

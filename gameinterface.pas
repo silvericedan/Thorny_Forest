@@ -288,12 +288,14 @@ procedure Interfaz.Game_Conditions(); {SETEA LOS TURNOS DE COMBATE DE LOS DIFERE
                         clrscr;
                         writeln;
                         writeln;
-                        writeln('                          YOU HAVE KILLED THE SHADE!!');
+                        writeln('                          YOU HAVE KILLED THE SHADOW!!');
                         writeln('                         YOUR REVENGE IS NOW COMPLETE');
                         if shadow_dagger=true then
                         writeln('    BUT SOMETHING IS WRONG... YOUR BODY BEGINS TO FADE AWAY... BECOMING A SHADOW...')
                         else
+                        writeln('                        THE MIST CLEARS AND YOU CAN SEE THE FOREST CLEARLY');
                         writeln('              IT SEEMS THAT THE SUN SHINES AGAIN... AND YOU RETURN TO YOUR CABIN ALIVE!');
+                        writeln('                 THE UNKNOWN HERO COMES BACK TO HIS LAND, AND GOES OFF IN A NEW ADVENTURE!');
                         readkey;
                         salida:=1;
                         exit;

@@ -1,0 +1,9 @@
+# project specific
+/bin
+/backup
+/lib
+
+# other files
+*.bak
+*.lps
+*.lpi

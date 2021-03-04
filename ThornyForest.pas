@@ -32,18 +32,56 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln('   PLAY USING YOUR KEYBOARD, WASD TO MOVE, BUMP INTO ENEMIES TO FIGHT THEM');
                 writeln('   THERE ARE SOME APPLES IN THE GROUND THAT WILL HEAL YOU, USE THEM WISELY!');
                 writeln('                  THE THORNY BUSHES CAN HURT YOU... OR SAVE YOU' );
-                writeln('                    FIND THE RUSTY DAGGER TO KILL THE SHADOW');
+                writeln('                    FIND THE RUSTY SWORD TO KILL THE SHADOW');
+                writeln('                     OR MAYBE THERES ANOTHER WAY TO BEAT IT..');
                 writeln;
-                writeln('                      GOOD LUCK! PRESS ANY KEY TO CONTINUE');
+                writeln('                               ### ENEMIES ### ');
+                writeln;
+                writeln('         R = Rabbit  -  F = Fox  -  W = Wolf  -  B = Bear  -  S = Shadow ');
+                writeln;
+                writeln('                                ### ITEMS  ### ');
+                writeln;
+                writeln('                   | = Stick  -  / = Big Stick  -  ! = Rusty Sword');
+                writeln('                        a = Apple  -  m = Meat  -  ~ = Mist');
+                writeln;
+                writeln('                      GOOD LUCK! PRESS ENTER TO CONTINUE');
 
                 readkey;
                 clrscr;
 
+
                 writeln;
+                writeln('################################################################################');
+                writeln('####################################,(@*########################################');
+                writeln('###################################*,%&/*#######################%&##############');
+                writeln('###################################(,(#,#####################(&#################');
+                writeln('#################################&@&%(###((#################%###################');
+                writeln('################################/#&&%/#%@@/.,############%%#####################');
+                writeln('#################################(*/&&,#(( ..,########/#########################');
+                writeln('##################################*,#,****##,(/#####/(##########################');
+                writeln('################################### . .(@@&##,((#*%#############################');
+                writeln('###################################*#%//  (@&(/(.,*(############################');
+                writeln('####################################@#(....*##/.################################');
+                writeln('##################################(@##.*..,.(###################################');
+                writeln('##################################%%@@##..//####################################');
+                writeln('#################################(/##/### .#//##################################');
+                writeln('##################################@%*#####(,/(##################################');
+                writeln('###############################(**/*%####%./,/######%%%%%#####%%%%%%%%%%%%%%%###');
+                writeln('####%##################%%%###%//(#%%%%%%%%(((#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%################%%%%%%%#%#*(##(#%%%%%%%///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%%%%%%%#%%#################(#@#%########/((##%%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%%%%%%%#%%%%%#############,,*(##########,##%####%###%#%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%%%%%%%%%%%%%%%%%%%%######/############(,(/(((%%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%%%%%%%%%%%%%%%%%%%%%%###*,/#(####%%%############%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('%%%%%%%%%%%%%%%%%%%%%%%%%%%##. ...%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+                writeln('################################################################################');
                 writeln;
+                writeln('                            PRESS ENTER TO CONTINUE');
+                readkey;
+                clrscr;
                 writeln('   You live alone in a cabin on the edge of the thorn forest. On a cold night you ');
                 writeln('   enter the forest to look for some fallen firewood, but a thick fog covers the   ');
-                writeln('   forest and prevents you from leaving. A shadow figure armed with rusty dagger ');
+                writeln('   forest and prevents you from leaving. A shadow figure armed with rusty sword ');
                 writeln('   passes by your side and leaves you with a bleeding wound ... ');
                 writeln('   You run as fast as you can and you lose your attacker, now you must recover ');
                 writeln('   your strength and try to get out of this cursed forest ...           ');
@@ -51,7 +89,7 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln;
                 writeln('                      Unless you take care of that shadow');
                 writeln;
-                writeln('                          PRESS ANY KEY TO CONTINUE');
+                writeln('                          PRESS ENTER TO CONTINUE');
                 readkey;
                 clrscr;
 
@@ -67,6 +105,7 @@ BEGIN
 
         Interf.Update_mdraw();
         Interf.Copy_map();
+        ch := #40;
 
         //Interf.First_consoleDraw();       //para activar camara desactivar este y
 
