@@ -43,7 +43,7 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln;
                 writeln('                                ### ITEMS  ### ');
                 writeln;
-                writeln('                   | = Stick  -  / = Big Stick  -  ! = Rusty Sword');
+                writeln('                   | = Stick  -  / = Wooden Club  -  ! = Rusty Sword');
                 writeln('                        a = Apple  -  m = Meat  -  ~ = Mist');
                 writeln;
                 writeln('                                ### TERRAIN  ### ');
