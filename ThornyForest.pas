@@ -34,8 +34,10 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln('                  THE THORNY BUSHES CAN HURT YOU... OR SAVE YOU' );
                 writeln('                    FIND THE RUSTY SWORD TO KILL THE SHADOW');
                 writeln('                     OR MAYBE THERES ANOTHER WAY TO BEAT IT..');
+                readkey;
+                clrscr;
                 writeln;
-                writeln('                               ### ENEMIES ### ');
+                writeln('                                ### ENEMIES ### ');
                 writeln;
                 writeln('         R = Rabbit  -  F = Fox  -  W = Wolf  -  B = Bear  -  S = Shadow ');
                 writeln;
@@ -44,7 +46,13 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln('                   | = Stick  -  / = Big Stick  -  ! = Rusty Sword');
                 writeln('                        a = Apple  -  m = Meat  -  ~ = Mist');
                 writeln;
-                writeln('                      GOOD LUCK! PRESS ENTER TO CONTINUE');
+                writeln('                                ### TERRAIN  ### ');
+                writeln;
+                writeln('                            , = Grass  -  . = Dirt  ');
+                writeln('                                & = Thorny Bush');
+                writeln;
+                writeln;
+                writeln('                        GOOD LUCK! PRESS ENTER TO CONTINUE');
 
                 readkey;
                 clrscr;
@@ -79,6 +87,9 @@ procedure Initial(); {INICIA RANDOMIZE Y DA LA PANTALLA DE PRESENTACION}
                 writeln('                            PRESS ENTER TO CONTINUE');
                 readkey;
                 clrscr;
+                writeln;
+                writeln('                               THE HISTORY');
+                writeln;
                 writeln('   You live alone in a cabin on the edge of the thorn forest. On a cold night you ');
                 writeln('   enter the forest to look for some fallen firewood, but a thick fog covers the   ');
                 writeln('   forest and prevents you from leaving. A shadow figure armed with rusty sword ');
