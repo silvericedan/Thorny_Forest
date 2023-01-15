@@ -1,4 +1,4 @@
-unit Actors;
+unit GameEntities;
 
 interface
 
@@ -32,7 +32,7 @@ type
 
   public
 
-    procedure respawn();
+    procedure InitializeItems();
     procedure behaviour();
     procedure pick_up();
     procedure update_mpos();
@@ -42,7 +42,7 @@ type
 
   { OBJETO PERSONAJE }
 
-  Personaje = object
+  MainCharacter = object
 
   private
     x, y, xb, yb, hp, maxhp, damage, atx, aty: integer;
@@ -52,10 +52,11 @@ type
   public
 
     procedure update_mpos();
-    procedure respawn();
+    procedure InitializeStats();
     procedure Detect_keyboard();
     procedure Player_movement();
     procedure Eat_fruit();
+    procedure CheatingMode();
 
   end;
 
@@ -87,8 +88,8 @@ type
   end;
 
 var
-  fruta: Items;
-  perso: Personaje;
+  itemInterface: Items;
+  mainChar: MainCharacter;
   monstruos: Critter;
 
   i: integer;
@@ -118,7 +119,7 @@ begin
 
 end;
 
-procedure Items.respawn();
+procedure Items.InitializeItems();
 var
   ritem, aitem: integer;
 begin
@@ -156,8 +157,8 @@ begin
     shadow_dagger := True;
 
 
-  perso.status := ('You get a ' + bufitem);
-  perso.eat_fruit();
+  mainChar.status := ('You get a ' + bufitem);
+  mainChar.eat_fruit();
 
   bufitem := '';
   bufhealing := 0;
@@ -196,27 +197,26 @@ procedure Items.Behaviour();
 begin
   if pick_up_item = True then
     for icheck := 1 to maxitems do
-      if (perso.aty = mitemsint[5, icheck]) and
-        (perso.atx = mitemsint[6, icheck]) then
+      if (mainChar.aty = mitemsint[5, icheck]) and
+        (mainChar.atx = mitemsint[6, icheck]) then
         pick_up();
 
 end;
 
 { ### PROCEDURES DE PERSONAJE ### }
-procedure Personaje.update_mpos();
+procedure MainCharacter.update_mpos();
 begin
   bufmpos := 2;
-  GameInterfaceImpl.set_mpos(perso.y, perso.x);
-  characterhp := perso.hp;
-  characterstatus := perso.status;
-  characteratk := perso.damage;
-  charactermaxhp := perso.maxhp;
-  characterX := perso.x;
-  characterY := perso.y;
+  GameInterfaceImpl.set_mpos(mainChar.y, mainChar.x);
+  characterhp := mainChar.hp;
+  characterstatus := mainChar.status;
+  characteratk := mainChar.damage;
+  charactermaxhp := mainChar.maxhp;
+  characterX := mainChar.x;
+  characterY := mainChar.y;
 end;
 
-
-procedure Personaje.respawn();
+procedure MainCharacter.InitializeStats();
 begin
   if (y <> 0) and (x <> 0) then
   begin
@@ -224,17 +224,17 @@ begin
     GameInterfaceImpl.set_mpos(y, x);
   end;
 
-  perso.y := inipeY;
-  perso.x := inipeX;
+  mainChar.y := inipeY;
+  mainChar.x := inipeX;
 
-  perso.hp := 8;
-  perso.maxhp := 16;
-  perso.damage := 1;
+  mainChar.hp := 8;
+  mainChar.maxhp := 16;
+  mainChar.damage := 1;
 
   update_mpos();
 end;
 
-procedure Personaje.Detect_Keyboard();
+procedure MainCharacter.Detect_Keyboard();
 begin
   ch := Readkey;
   move := lowercase(ch);
@@ -307,7 +307,7 @@ begin
 end;
 
 
-procedure Personaje.player_movement();
+procedure MainCharacter.player_movement();
 begin
   if GameInterfaceImpl.give_mbase(yb, xb) <> 0 then
   begin
@@ -316,14 +316,14 @@ begin
       0..1:
       begin    {encontro un espacio vacio}
         if GameInterfaceImpl.give_mbase(yb, xb) = 3 then
-          perso.hp := perso.hp - 1; //si pasa sobre arbustos espinosos "3" &, -1 vida.
+          mainChar.hp := mainChar.hp - 1; //si pasa sobre arbustos espinosos "3" &, -1 vida.
 
         movio := 2;
         bufmpos := 0;
         GameInterfaceImpl.set_mpos(y, x);
         y := yb;
         x := xb;
-        perso.status := ('Walking...');
+        mainChar.status := ('Walking...');
       end;
 
       3..79:
@@ -336,8 +336,8 @@ begin
         yb := y;   {devuelvo las coordenadas al lugar original}
         xb := x;
 
-        bufdamage := perso.damage;
-        perso.status := ('Attacking an enemy!');
+        bufdamage := mainChar.damage;
+        mainChar.status := ('Attacking an enemy!');
       end;
 
       80..99:
@@ -347,7 +347,7 @@ begin
         pick_up_item := True;
         aty := yb; {guardo las coordenadas donde levante}
         atx := xb;
-        fruta.behaviour();
+        itemInterface.behaviour();
         aty := 0; //reseteo aty y atx
         atx := 0;
         bufmpos := 0;
@@ -365,12 +365,12 @@ begin
     movio := 1;
     yb := y;
     xb := x;
-    perso.status := ('You lose your turn!');
+    mainChar.status := ('You lose your turn!');
   end;
 
 end;
 
-procedure Personaje.Eat_Fruit();
+procedure MainCharacter.Eat_Fruit();
 begin
   hp := hp + bufhealing;
   maxhp := maxhp + bufmaxhp;
@@ -381,6 +381,21 @@ begin
   contfruta := contfruta + 1;
 end;
 
+
+procedure MainCharacter.CheatingMode();
+begin
+
+  ch := Readkey;
+  if ch = '*' then
+  begin
+    writeln('                            Cheating mode enabled!');
+    mainChar.hp := 300;
+    mainChar.maxhp := 300;
+    mainChar.damage := 100;
+    readkey;
+  end;
+  clrscr;
+end;
 
 { ### PROCEDURES DE CRITTER ### }
 
@@ -459,7 +474,7 @@ end;
 
 procedure Critter.take_damage();
 begin
-  if (perso.atx = mcritterint[3, j0]) and (perso.aty = mcritterint[4, j0])
+  if (mainChar.atx = mcritterint[3, j0]) and (mainChar.aty = mcritterint[4, j0])
   then // (3,j0) posicion x / (4,j0) posicion y
   begin
     mcritterint[5, j0] := 1; // aggro on
@@ -467,8 +482,8 @@ begin
 
     made_attack := False;
     bufdamage := 0;
-    perso.aty := 0;
-    perso.atx := 0;
+    mainChar.aty := 0;
+    mainChar.atx := 0;
   end;
   if mcritterint[6, j0] < 0 then
     mcritterint[2, j0] := 0; // si hp<0 -> live = false
@@ -497,10 +512,10 @@ begin
 
   for i := 1 to 2 do
   begin
-    if (perso.x = mcritterint[3, j0]) and (ag = 0) then
+    if (mainChar.x = mcritterint[3, j0]) and (ag = 0) then
       ag := random(2) //si ya estas en su x y sale moverse en x, re-tirar
     else
-    if (perso.y = mcritterint[4, j0]) and (ag = 1) then
+    if (mainChar.y = mcritterint[4, j0]) and (ag = 1) then
       ag := random(2);
 
   end;
@@ -509,20 +524,20 @@ begin
 
     0:
     begin
-      if (perso.x < mcritterint[3, j0]) then
+      if (mainChar.x < mcritterint[3, j0]) then
         choice := 0;
 
-      if (perso.x > mcritterint[3, j0]) then
+      if (mainChar.x > mcritterint[3, j0]) then
         choice := 1;
     end;
 
 
     1:
     begin
-      if (perso.y < mcritterint[4, j0]) then
+      if (mainChar.y < mcritterint[4, j0]) then
         choice := 2;
 
-      if (perso.y > mcritterint[4, j0]) then
+      if (mainChar.y > mcritterint[4, j0]) then
         choice := 3;
     end;
   end;
@@ -588,7 +603,7 @@ begin
 
       2:
       begin        {encuentra un personaje}
-        perso.hp := perso.hp - mcritterint[7, j0];
+        mainChar.hp := mainChar.hp - mcritterint[7, j0];
         //personaje hp - critter damage
         status := (' El ' + mcritterstr[1, j0] + ' te a atacado!');
 

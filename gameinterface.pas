@@ -3,7 +3,7 @@ unit GameInterface;
 interface
 
 uses
-  Classes, crt, SysUtils, GameEntitiesStats;
+  Classes, crt, SysUtils, GameEntitiesStats, TextStoryScreen;
 
 const
   fila = 25;
@@ -268,12 +268,7 @@ begin
 
   if characterhp <= 0 then
   begin
-    clrscr;
-    writeln;
-    writeln;
-    writeln('                                  YOU DIED');
-    writeln;
-    writeln('                            BETTER LUCK NEXT TIME!');
+    TextStoryScreenImpl.YouDied();
     readkey;
     salida := 1;
     exit;
@@ -281,23 +276,14 @@ begin
 
   if Shadow_killed = True then
   begin
-    clrscr;
-    writeln;
-    writeln;
-    writeln(
-      '                          YOU HAVE KILLED THE SHADOW!!');
-    writeln('                         YOUR REVENGE IS NOW COMPLETE');
+      TextStoryScreenImpl.ShadowKilled();
     if shadow_dagger = True then
-      writeln(
-        '    BUT SOMETHING IS WRONG... YOUR BODY BEGINS TO FADE AWAY... BECOMING A SHADOW...')
+    begin
+      TextStoryScreenImpl.BecomeShadow();
+    end
     else
     begin
-      writeln(
-        '                        THE MIST CLEARS AND YOU CAN SEE THE FOREST CLEARLY');
-      writeln(
-        '              IT SEEMS THAT THE SUN SHINES AGAIN... AND YOU RETURN TO YOUR CABIN ALIVE!');
-      writeln(
-        '                 THE UNKNOWN HERO COMES BACK TO HIS LAND, AND GOES OFF IN A NEW ADVENTURE!');
+      TextStoryScreenImpl.GoodEnding();
     end;
     readkey;
     salida := 1;

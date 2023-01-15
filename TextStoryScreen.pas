@@ -14,6 +14,10 @@ type
 
     procedure Initial();
     procedure Final();
+    procedure YouDied();
+    procedure ShadowKilled();
+    procedure BecomeShadow();
+    procedure GoodEnding();    
 
     end;
 
@@ -107,8 +111,6 @@ implementation
                 writeln('                      Unless you take care of that shadow');
                 writeln;
                 writeln('                          PRESS ENTER TO CONTINUE');
-                readkey;
-                clrscr;
 
         EnD;
 
@@ -121,5 +123,36 @@ implementation
                 writeln('                               PRESS ANY KEY TO EXIT');
                 cursoron;
                 readkey;
+        EnD;
+
+    procedure TextStoryScreenType.YouDied();
+        BegiN
+                clrscr;
+                writeln;
+                writeln;
+                writeln('                                  YOU DIED');
+                writeln;
+                writeln('                            BETTER LUCK NEXT TIME!');
+        EnD;
+
+        procedure TextStoryScreenType.ShadowKilled(); 
+        BegiN
+                clrscr;
+                writeln;
+                writeln;
+                writeln('                          YOU HAVE KILLED THE SHADOW!!');
+                writeln('                         YOUR REVENGE IS NOW COMPLETE');
+        EnD;
+
+        procedure TextStoryScreenType.BecomeShadow();
+        BegiN
+                writeln('    BUT SOMETHING IS WRONG... YOUR BODY BEGINS TO FADE AWAY... BECOMING A SHADOW...')
+        EnD;
+
+                procedure TextStoryScreenType.GoodEnding();
+        BegiN
+                writeln('                        THE MIST CLEARS AND YOU CAN SEE THE FOREST CLEARLY');
+                writeln('              IT SEEMS THAT THE SUN SHINES AGAIN... AND YOU RETURN TO YOUR CABIN ALIVE!');
+                writeln('                 THE UNKNOWN HERO COMES BACK TO HIS LAND, AND GOES OFF IN A NEW ADVENTURE!');
         EnD;
 end.

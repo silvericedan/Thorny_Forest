@@ -2,7 +2,7 @@ program ThornyForest;
 
 uses
   crt,
-  Actors,
+  GameEntities,
   GameInterface,
   TextStoryScreen;
 
@@ -16,11 +16,12 @@ uses
 
 begin
   randomize();
-  TextStoryScreenImpl.Initial();
   GameInterfaceImpl.Load_mbase();
-  perso.respawn();
-  perso.update_mpos();
-  fruta.respawn();
+  mainChar.InitializeStats();
+  TextStoryScreenImpl.Initial();
+  mainChar.CheatingMode();
+  mainChar.update_mpos();
+  itemInterface.InitializeItems();
   monstruos.existence();
 
   GameInterfaceImpl.Update_mdraw();
@@ -32,16 +33,16 @@ begin
     GameInterfaceImpl.Update_mdraw();
     GameInterfaceImpl.Camera();
     GameInterfaceImpl.Copy_map();
-    Perso.Detect_Keyboard();
-    Perso.Player_Movement();
-    perso.update_mpos();
+    mainChar.Detect_Keyboard();
+    mainChar.Player_Movement();
+    mainChar.update_mpos();
     monstruos.behavior();
     if Drop_items = True then
     begin
-      fruta.npc_created();
+      itemInterface.npc_created();
       Drop_items := False;
     end;
-    perso.update_mpos();
+    mainChar.update_mpos();
     GameInterfaceImpl.Game_conditions();
 
   end;
