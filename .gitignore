@@ -2,6 +2,7 @@
 /bin
 /backup
 /lib
+/.vscode
 
 # other files
 *.bak
