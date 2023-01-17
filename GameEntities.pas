@@ -33,10 +33,10 @@ type
   public
 
     procedure InitializeItems();
-    procedure behaviour();
-    procedure pick_up();
+    procedure CheckWhichItemHasBeenFound();
+    procedure PickUpAndUseItem();
     procedure StartingItemMPos();
-    procedure npc_created();
+    procedure CreatureSpawnMeat();
 
   end;
 
@@ -51,11 +51,11 @@ type
 
   public
 
-    procedure update_mpos();
+    procedure PassMposAndStatsToGameInterface();
     procedure InitializeStats();
-    procedure Detect_keyboard();
-    procedure Player_movement();
-    procedure Eat_fruit();
+    procedure DetectKeyboardInput();
+    procedure PlayerMovement();
+    procedure UseItem();
     procedure CheatingMode();
 
   end;
@@ -77,13 +77,13 @@ type
 
     procedure existence(); {si existe hace algo, sino no}
     procedure update_mpos();{simbolo en xy, hp en hub y status hud}
-    procedure respawn();     {aparece xy en mpos,setea stats}
+    procedure GenerateCritterSetStatsAndPosition();     {aparece xy en mpos,setea stats}
     procedure despawn();      {borra xy en mpos}
     procedure movement(m: integer);
     procedure stance(ag: integer);  {si persigue o se mueve aleatorio}
-    procedure take_damage();
+    procedure CritterTakeDamage();
     procedure Behavior();        {si esta vivo-> toma daño, mueve, ataca}
-    procedure drop_item();
+    procedure DropItemOnDead();
 
   end;
 
@@ -99,7 +99,7 @@ var
 
   currenticon, currentipo, ENstatus, bufitem: string;
 
-  made_attack, pick_up_item, drop_items: boolean;
+  isMainCharacterAttacking, isItemOnCurrentTile: boolean;
 
   ch, move: char;
 
@@ -112,10 +112,10 @@ begin
   repeat
     mitemsint[5, i0] := random(fila - 8) + 5;   //item posicion Y
     mitemsint[6, i0] := random(col - 8) + 5;     // item posicion X
-  until GameInterfaceImpl.give_mpos(mitemsint[5, i0], mitemsint[6, i0]) = 0;
+  until gameInterfaceImpl.give_mpos(mitemsint[5, i0], mitemsint[6, i0]) = 0;
 
   bufmpos := mitemsint[4, i0];
-  GameInterfaceImpl.set_mpos(mitemsint[5, i0], mitemsint[6, i0]); //set_mpos(y,x)
+  gameInterfaceImpl.set_mpos(mitemsint[5, i0], mitemsint[6, i0]); //set_mpos(y,x)
 
 end;
 
@@ -147,7 +147,7 @@ begin
   end;
 end;
 
-procedure Items.pick_up();
+procedure Items.PickUpAndUseItem();
 begin
   bufhealing := mitemsint[1, icheck];
   bufmaxhp := mitemsint[2, icheck];
@@ -158,19 +158,18 @@ begin
 
 
   mainChar.status := ('You get a ' + bufitem);
-  mainChar.eat_fruit();
+  mainChar.UseItem();
 
   bufitem := '';
   bufhealing := 0;
   bufmaxhp := 0;
   bufatk := 0;
 
-  pick_up_item := False;
+  isItemOnCurrentTile := False;
 
-  //respawn();
 end;
 
-procedure Items.npc_created();
+procedure Items.CreatureSpawnMeat();
 var
   citem: integer;
 begin
@@ -189,25 +188,25 @@ begin
   mitemsint[6, i0] := xfru;     // item posicion X
 
   bufmpos := mitemsint[4, i0];
-  GameInterfaceImpl.set_mpos(yfru, xfru); //set_mpos(y,x)
+  gameInterfaceImpl.set_mpos(yfru, xfru); //set_mpos(y,x)
 
 end;
 
-procedure Items.Behaviour();
+procedure Items.CheckWhichItemHasBeenFound();
 begin
-  if pick_up_item = True then
+  if isItemOnCurrentTile = True then
     for icheck := 1 to maxitems do
       if (mainChar.aty = mitemsint[5, icheck]) and
         (mainChar.atx = mitemsint[6, icheck]) then
-        pick_up();
+        PickUpAndUseItem();
 
 end;
 
 { ### PROCEDURES DE PERSONAJE ### }
-procedure MainCharacter.update_mpos();
+procedure MainCharacter.PassMposAndStatsToGameInterface();
 begin
   bufmpos := 2;
-  GameInterfaceImpl.set_mpos(mainChar.y, mainChar.x);
+  gameInterfaceImpl.set_mpos(mainChar.y, mainChar.x);
   characterhp := mainChar.hp;
   characterstatus := mainChar.status;
   characteratk := mainChar.damage;
@@ -221,7 +220,7 @@ begin
   if (y <> 0) and (x <> 0) then
   begin
     bufmpos := 0;
-    GameInterfaceImpl.set_mpos(y, x);
+    gameInterfaceImpl.set_mpos(y, x);
   end;
 
   mainChar.y := inipeY;
@@ -231,10 +230,10 @@ begin
   mainChar.maxhp := 16;
   mainChar.damage := 1;
 
-  update_mpos();
+  PassMposAndStatsToGameInterface();
 end;
 
-procedure MainCharacter.Detect_Keyboard();
+procedure MainCharacter.DetectKeyboardInput();
 begin
   ch := Readkey;
   move := lowercase(ch);
@@ -307,20 +306,20 @@ begin
 end;
 
 
-procedure MainCharacter.player_movement();
+procedure MainCharacter.PlayerMovement();
 begin
-  if GameInterfaceImpl.give_mbase(yb, xb) <> 0 then
+  if gameInterfaceImpl.give_mbase(yb, xb) <> 0 then
   begin
-    case GameInterfaceImpl.give_mpos(yb, xb) of
+    case gameInterfaceImpl.give_mpos(yb, xb) of
 
       0..1:
       begin    {encontro un espacio vacio}
-        if GameInterfaceImpl.give_mbase(yb, xb) = 3 then
+        if gameInterfaceImpl.give_mbase(yb, xb) = 3 then
           mainChar.hp := mainChar.hp - 1; //si pasa sobre arbustos espinosos "3" &, -1 vida.
 
         movio := 2;
         bufmpos := 0;
-        GameInterfaceImpl.set_mpos(y, x);
+        gameInterfaceImpl.set_mpos(y, x);
         y := yb;
         x := xb;
         mainChar.status := ('Walking...');
@@ -329,7 +328,7 @@ begin
       3..79:
       begin       {encontro un enemigo}
         movio := 3;
-        made_attack := True;
+        isMainCharacterAttacking := True;
         aty := yb; {guardo las coordenadas donde ataqu‚}
         atx := xb;
 
@@ -344,17 +343,17 @@ begin
       begin           {encontro un item}
 
         movio := 2;
-        pick_up_item := True;
+        isItemOnCurrentTile := True;
         aty := yb; {guardo las coordenadas donde levante}
         atx := xb;
-        itemInterface.behaviour();
+        itemInterface.CheckWhichItemHasBeenFound();
         aty := 0; //reseteo aty y atx
         atx := 0;
         bufmpos := 0;
-        GameInterfaceImpl.set_mpos(y, x);
+        gameInterfaceImpl.set_mpos(y, x);
         y := yb;
         x := xb;
-        GameInterfaceImpl.set_mpos(yb, xb);
+        gameInterfaceImpl.set_mpos(yb, xb);
 
       end;
 
@@ -370,7 +369,7 @@ begin
 
 end;
 
-procedure MainCharacter.Eat_Fruit();
+procedure MainCharacter.UseItem();
 begin
   hp := hp + bufhealing;
   maxhp := maxhp + bufmaxhp;
@@ -426,13 +425,13 @@ begin
     if mcritterint[1, j0] = 1 then // si se habilito respawn
     begin
       mcritterint[1, j0] := 0; //apago respawn
-      respawn();
+      GenerateCritterSetStatsAndPosition();
     end;
 
   end;
 end;
 
-procedure Critter.respawn();
+procedure Critter.GenerateCritterSetStatsAndPosition();
 var
   spawning, aspawning: integer;
 begin
@@ -442,7 +441,7 @@ begin
     mcritterint[3, j0] := random(col - 8) + 5; // posicion inicial x
     mcritterint[4, j0] := random(fila - 8) + 5; // posicion inicial y
 
-  until GameInterfaceImpl.give_mpos(mcritterint[4, j0], mcritterint[3, j0]) = 0;
+  until gameInterfaceImpl.give_mpos(mcritterint[4, j0], mcritterint[3, j0]) = 0;
 
   aspawning := random(100) + 1;
   case aspawning of
@@ -469,10 +468,10 @@ end;
 procedure Critter.update_mpos();
 begin
   bufmpos := mcritterint[8, j0];
-  GameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
+  gameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
 end;
 
-procedure Critter.take_damage();
+procedure Critter.CritterTakeDamage();
 begin
   if (mainChar.atx = mcritterint[3, j0]) and (mainChar.aty = mcritterint[4, j0])
   then // (3,j0) posicion x / (4,j0) posicion y
@@ -480,7 +479,7 @@ begin
     mcritterint[5, j0] := 1; // aggro on
     mcritterint[6, j0] := mcritterint[6, j0] - bufdamage;  //hp-damage
 
-    made_attack := False;
+    isMainCharacterAttacking := False;
     bufdamage := 0;
     mainChar.aty := 0;
     mainChar.atx := 0;
@@ -493,13 +492,13 @@ procedure Critter.despawn();
 begin
 
   bufmpos := 0;
-  GameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
+  gameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
   //altera matriz mpos dejando espacio vacio
   if mcritterstr[1, j0] <> 'Shadow' then
   begin
     xfru := mcritterint[3, j0];
     yfru := mcritterint[4, j0];
-    Drop_items := True;
+    DropItemOnDead();
   end;
   if mcritterstr[1, j0] = 'Shadow' then
     Shadow_killed := True;
@@ -577,24 +576,24 @@ begin
     end;
   end;
 
-  if (GameInterfaceImpl.give_mbase(yb, xb) <> 0) then
+  if (gameInterfaceImpl.give_mbase(yb, xb) <> 0) then
   begin
-    case GameInterfaceImpl.give_mpos(yb, xb) of
+    case gameInterfaceImpl.give_mpos(yb, xb) of
 
 
       0..1:
       begin     {encontro un espacio vacio}
-        if (GameInterfaceImpl.give_mbase(yb, xb) <> 3) then
+        if (gameInterfaceImpl.give_mbase(yb, xb) <> 3) then
         begin
           bufmpos := 0;
-          GameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
+          gameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
           //altera matriz mpos dejando espacio vacio
 
           mcritterint[4, j0] := yb;  // se mueve a nuevo y
           mcritterint[3, j0] := xb;  // se mueve a nuevo x
 
           bufmpos := mcritterint[8, j0];
-          GameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
+          gameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
           //altera matriz mpos dejando su simbolo
 
           status := (' El ' + mcritterstr[1, j0] + ' se a movido!');
@@ -613,9 +612,9 @@ begin
 
 end;
 
-procedure Critter.Drop_item();
+procedure Critter.DropItemOnDead();
 begin
-
+  itemInterface.CreatureSpawnMeat();
 end;
 
 procedure Critter.Behavior();
@@ -626,9 +625,9 @@ begin
     if mcritterint[2, j0] = 1 then //si esta vivo hacer
     begin
 
-      if made_attack = True then
+      if isMainCharacterAttacking = True then
       begin
-        take_damage();
+        CritterTakeDamage();
       end;
 
       if mcritterint[2, j0] = 1 then

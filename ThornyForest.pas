@@ -16,34 +16,29 @@ uses
 
 begin
   randomize();
-  GameInterfaceImpl.Load_mbase();
+  gameInterfaceImpl.Load_mbase();
   mainChar.InitializeStats();
   TextStoryScreenImpl.Initial();
   mainChar.CheatingMode();
-  mainChar.update_mpos();
+  mainChar.PassMposAndStatsToGameInterface();
   itemInterface.InitializeItems();
   monstruos.existence();
 
-  GameInterfaceImpl.Update_mdraw();
-  GameInterfaceImpl.Copy_map();
+  gameInterfaceImpl.Update_mdraw();
+  gameInterfaceImpl.Copy_map();
   ch := #40;
 
   while (ch <> #27) and (salida <> 1) do
   begin
-    GameInterfaceImpl.Update_mdraw();
-    GameInterfaceImpl.Camera();
-    GameInterfaceImpl.Copy_map();
-    mainChar.Detect_Keyboard();
-    mainChar.Player_Movement();
-    mainChar.update_mpos();
-    monstruos.behavior();
-    if Drop_items = True then
-    begin
-      itemInterface.npc_created();
-      Drop_items := False;
-    end;
-    mainChar.update_mpos();
-    GameInterfaceImpl.Game_conditions();
+    gameInterfaceImpl.Update_mdraw();
+    gameInterfaceImpl.Camera();
+    gameInterfaceImpl.Copy_map();
+    mainChar.DetectKeyboardInput();
+    mainChar.PlayerMovement();
+    mainChar.PassMposAndStatsToGameInterface();
+    monstruos.Behavior();
+    mainChar.PassMposAndStatsToGameInterface();
+    gameInterfaceImpl.Game_conditions();
 
   end;
 

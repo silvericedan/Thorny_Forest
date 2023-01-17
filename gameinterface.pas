@@ -45,7 +45,7 @@ type
   end;
 
 var
-  GameInterfaceImpl: GameInterfaceType;
+  gameInterfaceImpl: GameInterfaceType;
 
   x, y, bufsimbol, movio, turno, contfruta, round: integer;
   characterhp, characteratk, charactermaxhp,
