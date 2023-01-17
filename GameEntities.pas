@@ -35,7 +35,7 @@ type
     procedure InitializeItems();
     procedure behaviour();
     procedure pick_up();
-    procedure update_mpos();
+    procedure StartingItemMPos();
     procedure npc_created();
 
   end;
@@ -107,7 +107,7 @@ var
 implementation
 
 { ### PROCEDURES DE ITEMS ### }
-procedure Items.update_mpos();
+procedure Items.StartingItemMPos();
 begin
   repeat
     mitemsint[5, i0] := random(fila - 8) + 5;   //item posicion Y
@@ -143,7 +143,7 @@ begin
     mitemsint[4, i0] := estaditems[4, ritem];  //simbolo numerico
 
 
-    update_mpos();
+    StartingItemMPos();
   end;
 end;
 
