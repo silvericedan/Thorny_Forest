@@ -48,10 +48,9 @@ var
   gameInterfaceImpl: GameInterfaceType;
 
   x, y, bufsimbol, movio, turno, contfruta, round: integer;
-  characterhp, characteratk, charactermaxhp,
-  currentipo, currenthp, ENstatus: integer;
+  characterhp, characteratk, charactermaxhp : integer;
   characterstatus, dire: string;
-  salida, bufmpos, characterX, characterY, xfru, yfru: integer;
+  salida, bufmpos, characterX, characterY: integer;
   i0, j0: integer; {contadores de ciclo i0 item/ j0 critter}
   shadow_killed, shadow_dagger: boolean;
 
@@ -66,13 +65,12 @@ begin
   begin
     for x := 5 to col - 4 do
     begin
-      //mbase[y,x]:=random(3)+1;
       rbase := random(100) + 1;
       case rbase of
-        1..30: mbase[y, x] := 1;
-        31..80: mbase[y, x] := 2;
-        81..100: mbase[y, x] := 3;
-      end;  //1 liso, 2 cesped, 3 arbusto }
+        1..30: mbase[y, x] := 1; // 1 es grava
+        31..80: mbase[y, x] := 2; // 2 es cesped
+        81..100: mbase[y, x] := 3; // 3 es arbusto espinoso
+      end;
     end;
   end;
 

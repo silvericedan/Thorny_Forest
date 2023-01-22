@@ -95,13 +95,13 @@ var
   i: integer;
   icheck: integer;{contadores de ciclo i0 item/ j0 critter/item check}
 
-  bufdamage, criatura, salida, bufsimbol, bufhealing, bufatk, bufmaxhp: integer;
+  itemBonusHealth, itemBonusAttack, itemBonusMaxHealth, xfru, yfru: integer;
 
-  currenticon, currentipo, ENstatus, bufitem: string;
+  itemName: string;
 
   isMainCharacterAttacking, isItemOnCurrentTile: boolean;
 
-  ch, move: char;
+  keyPressed, keyPressedLowerCase: char;
 
 
 implementation
@@ -127,12 +127,12 @@ begin
   begin
     aitem := random(100) + 1;
     case aitem of
-      1..50: ritem := 1;
-      51..80: ritem := random(2) + 2;
-      81..100: ritem := 5;
+      1..50: ritem := 1; //apples
+      51..80: ritem := random(2) + 2; //2 stick y 3 wooden club
+      81..100: ritem := 5; //5 mist
     end;
     if i0 = 1 then
-      ritem := 4;//dagger
+      ritem := 4; //4 dagger
 
     mitemsstr[1, i0] := nombresitems[1, ritem]; //setea nombre
     mitemsstr[2, i0] := nombresitems[2, ritem]; //setea icono
@@ -149,21 +149,22 @@ end;
 
 procedure Items.PickUpAndUseItem();
 begin
-  bufhealing := mitemsint[1, icheck];
-  bufmaxhp := mitemsint[2, icheck];
-  bufatk := mitemsint[3, icheck];
-  bufitem := mitemsstr[1, icheck];
+  itemBonusHealth := mitemsint[1, icheck];
+  itemBonusMaxHealth := mitemsint[2, icheck];
+  itemBonusAttack := mitemsint[3, icheck];
+  itemName := mitemsstr[1, icheck];
+  mainChar.status := ('You get a ' + itemName);
   if icheck = 1 then
+    begin
     shadow_dagger := True;
-
-
-  mainChar.status := ('You get a ' + bufitem);
+    mainChar.status := mainChar.status + ', something is wrong...'
+    end;
   mainChar.UseItem();
 
-  bufitem := '';
-  bufhealing := 0;
-  bufmaxhp := 0;
-  bufatk := 0;
+  itemName := '';
+  itemBonusHealth := 0;
+  itemBonusMaxHealth := 0;
+  itemBonusAttack := 0;
 
   isItemOnCurrentTile := False;
 
@@ -235,9 +236,9 @@ end;
 
 procedure MainCharacter.DetectKeyboardInput();
 begin
-  ch := Readkey;
-  move := lowercase(ch);
-  case (move) of
+  keyPressed := Readkey;
+  keyPressedLowerCase := lowercase(keyPressed);
+  case (keyPressedLowerCase) of
     'k':
     begin         {k es left arrow}
       yb := y;
@@ -335,7 +336,6 @@ begin
         yb := y;   {devuelvo las coordenadas al lugar original}
         xb := x;
 
-        bufdamage := mainChar.damage;
         mainChar.status := ('Attacking an enemy!');
       end;
 
@@ -371,10 +371,10 @@ end;
 
 procedure MainCharacter.UseItem();
 begin
-  hp := hp + bufhealing;
-  maxhp := maxhp + bufmaxhp;
-  if bufatk > damage then
-    damage := bufatk;
+  hp := hp + itemBonusHealth;
+  maxhp := maxhp + itemBonusMaxHealth;
+  if itemBonusAttack > damage then
+    damage := itemBonusAttack;
   if hp > maxhp then
     hp := maxhp;
   contfruta := contfruta + 1;
@@ -384,8 +384,8 @@ end;
 procedure MainCharacter.CheatingMode();
 begin
 
-  ch := Readkey;
-  if ch = '*' then
+  keyPressed := Readkey;
+  if keyPressed = '*' then
   begin
     writeln('                            Cheating mode enabled!');
     mainChar.hp := 300;
@@ -477,10 +477,9 @@ begin
   then // (3,j0) posicion x / (4,j0) posicion y
   begin
     mcritterint[5, j0] := 1; // aggro on
-    mcritterint[6, j0] := mcritterint[6, j0] - bufdamage;  //hp-damage
+    mcritterint[6, j0] := mcritterint[6, j0] - mainChar.damage;  //hp-damage
 
     isMainCharacterAttacking := False;
-    bufdamage := 0;
     mainChar.aty := 0;
     mainChar.atx := 0;
   end;
