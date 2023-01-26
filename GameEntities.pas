@@ -90,7 +90,7 @@ type
 var
   itemInterface: Items;
   mainChar: MainCharacter;
-  monstruos: Critter;
+  npcCritter: Critter;
 
   i: integer;
   icheck: integer;{contadores de ciclo i0 item/ j0 critter/item check}
@@ -302,7 +302,7 @@ begin
 
   end;
 
-  turno := turno + 1;
+  hudTurn := hudTurn + 1;
 
 end;
 
@@ -377,7 +377,7 @@ begin
     damage := itemBonusAttack;
   if hp > maxhp then
     hp := maxhp;
-  contfruta := contfruta + 1;
+  hudItems := hudItems + 1;
 end;
 
 

@@ -47,7 +47,7 @@ type
 var
   gameInterfaceImpl: GameInterfaceType;
 
-  x, y, bufsimbol, movio, turno, contfruta, round: integer;
+  x, y, bufsimbol, movio, hudTurn, hudItems, round: integer;
   characterhp, characteratk, charactermaxhp : integer;
   characterstatus, dire: string;
   salida, bufmpos, characterX, characterY: integer;
@@ -237,15 +237,15 @@ begin
   end;
 
   gotoxy(25, 2);
-  Write('Turn:', turno);
+  Write('Turn:', hudTurn);
   gotoxy(25, 3);
-  Write('Items:', contfruta);
+  Write('Items:', hudItems);
   gotoxy(25, 4);
   Write('Hit Points:', characterhp, '/', charactermaxhp, '   ');
   gotoxy(25, 5);
   Write('Attack:', characteratk, '        ');
   gotoxy(25, 7);
-  Write(characterstatus, '             ');
+  Write(characterstatus, '                                   ');
 
 end;
 

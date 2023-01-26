@@ -14,7 +14,7 @@ begin
   mainChar.CheatingMode();
   mainChar.PassMposAndStatsToGameInterface();
   itemInterface.InitializeItems();
-  monstruos.existence();
+  npcCritter.existence();
 
   gameInterfaceImpl.Update_mdraw();
   gameInterfaceImpl.Copy_map();
@@ -28,7 +28,7 @@ begin
     mainChar.DetectKeyboardInput();
     mainChar.PlayerMovement();
     mainChar.PassMposAndStatsToGameInterface();
-    monstruos.Behavior();
+    npcCritter.Behavior();
     mainChar.PassMposAndStatsToGameInterface();
     gameInterfaceImpl.Game_conditions();
 
