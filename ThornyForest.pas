@@ -14,7 +14,7 @@ begin
   mainChar.CheatingMode();
   mainChar.PassMposAndStatsToGameInterface();
   itemInterface.InitializeItems();
-  npcCritter.existence();
+  npcCritter.EnableCrittersSpawn();
 
   gameInterfaceImpl.Update_mdraw();
   gameInterfaceImpl.Copy_map();

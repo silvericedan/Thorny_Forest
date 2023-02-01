@@ -75,13 +75,14 @@ type
 
   public
 
-    procedure existence(); {si existe hace algo, sino no}
+    procedure EnableCrittersSpawn(); {habilita la creacion de critter}
     procedure update_mpos();{simbolo en xy, hp en hub y status hud}
     procedure GenerateCritterSetStatsAndPosition();     {aparece xy en mpos,setea stats}
-    procedure despawn();      {borra xy en mpos}
-    procedure movement(m: integer);
-    procedure stance(ag: integer);  {si persigue o se mueve aleatorio}
+    procedure RemoveCritterFromMPos();      {borra xy en mpos}
+    procedure CritterMoves(m: integer);
+    procedure CritterRollsChoice(ag: integer);  {si persigue o se mueve aleatorio}
     procedure CritterTakeDamage();
+    procedure CritterDies();
     procedure Behavior();        {si esta vivo-> toma daño, mueve, ataca}
     procedure DropItemOnDead();
 
@@ -398,7 +399,7 @@ end;
 
 { ### PROCEDURES DE CRITTER ### }
 
-procedure Critter.existence();
+procedure Critter.EnableCrittersSpawn();
 begin
   mcritterint[1, 1] := 1; //doy vida a una criatura
   mcritterint[1, 2] := 1;
@@ -484,27 +485,35 @@ begin
     mainChar.atx := 0;
   end;
   if mcritterint[6, j0] < 0 then
-    mcritterint[2, j0] := 0; // si hp<0 -> live = false
+    RemoveCritterFromMPos();
 end;
 
-procedure Critter.despawn();
+procedure Critter.CritterDies();
+begin
+  
+    mcritterint[2, j0] := 0; // si hp<0 -> live = false
+
+    if mcritterstr[1, j0] <> 'Shadow' then
+    begin
+      xfru := mcritterint[3, j0];
+      yfru := mcritterint[4, j0];
+      DropItemOnDead();
+    end;
+    if mcritterstr[1, j0] = 'Shadow' then
+      Shadow_killed := True;
+end;
+
+procedure Critter.RemoveCritterFromMPos();
 begin
 
   bufmpos := 0;
   gameInterfaceImpl.set_mpos(mcritterint[4, j0], mcritterint[3, j0]);
   //altera matriz mpos dejando espacio vacio
-  if mcritterstr[1, j0] <> 'Shadow' then
-  begin
-    xfru := mcritterint[3, j0];
-    yfru := mcritterint[4, j0];
-    DropItemOnDead();
-  end;
-  if mcritterstr[1, j0] = 'Shadow' then
-    Shadow_killed := True;
+  CritterDies();
 
 end;
 
-procedure Critter.stance(ag: integer);
+procedure Critter.CritterRollsChoice(ag: integer);
 begin
   ag := random(2);
 
@@ -542,7 +551,7 @@ begin
 
 end;
 
-procedure Critter.movement(m: integer);
+procedure Critter.CritterMoves(m: integer);
 begin
   if mcritterint[5, j0] = 0 then
     m := random(4)
@@ -632,11 +641,11 @@ begin
       if mcritterint[2, j0] = 1 then
         // si sigue vivo dsp de recibir daño
       begin
-        stance(1);
-        movement(1);
+        CritterRollsChoice(1);
+        CritterMoves(1);
       end
       else
-        despawn();  //si no sigue vivo, apagar
+        RemoveCritterFromMPos();  //si no sigue vivo, apagar
 
     end;
 
